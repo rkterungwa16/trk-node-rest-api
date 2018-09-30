@@ -24,7 +24,7 @@ const httpsServer = https.createServer(httpsServerOptions, function (req, res) {
 })
 
 httpsServer.listen(config.httpsPort, function () {
-  console.log(`The HTTPS server is running on port ${config.httpsPort}`)
+  console.info(`The HTTPS server is running on port ${config.httpsPort}`)
 })
 
 const unifiedServer = function (req, res) {
@@ -75,8 +75,8 @@ const unifiedServer = function (req, res) {
 
 const handlers = {}
 
-handlers.sample = function (data, callback) {
-  callback(406, { 'name': 'sample handler' })
+handlers.hello = function (data, callback) {
+  callback(406, { 'response': 'Hello, how are you doing? Welcome to Nodejs Master class' })
 }
 
 handlers.notFound = function (data, callback) {
@@ -84,5 +84,5 @@ handlers.notFound = function (data, callback) {
 }
 
 const router = {
-  'sample': handlers.sample
+  'hello': handlers.hello
 }
