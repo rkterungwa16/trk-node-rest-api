@@ -5,7 +5,16 @@ const StringDecoder = require('string_decoder').StringDecoder
 const fs = require('fs')
 
 const config = require('./config')
+const Data = require('./lib/data')
 
+const data = new Data()
+data.create('test', 'newFile', { foo: 'bar' }, (err, value) => {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(value)
+  }
+})
 const httpServer = http.createServer(function (req, res) {
   unifiedServer(req, res)
 })
@@ -76,11 +85,11 @@ const unifiedServer = function (req, res) {
 const handlers = {}
 
 handlers.hello = function (data, callback) {
-  callback(406, { 'response': 'Hello, how are you doing? Welcome to Nodejs Master class' })
+  callback(new Error(406), { 'response': 'Hello, how are you doing? Welcome to Nodejs Master class' })
 }
 
 handlers.notFound = function (data, callback) {
-  callback(404)
+  callback(new Error(404))
 }
 
 const router = {
