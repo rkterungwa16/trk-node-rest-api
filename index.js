@@ -8,7 +8,7 @@ const config = require('./config')
 const Data = require('./lib/data')
 
 const data = new Data()
-data.create('test', 'newFile', { foo: 'bar' })
+data.read('test', 'newFile')
   .then((value) => console.log('success', value))
   .catch((err) => {
     return console.log('error', err)
