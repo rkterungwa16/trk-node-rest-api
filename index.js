@@ -8,13 +8,11 @@ const config = require('./config')
 const Data = require('./lib/data')
 
 const data = new Data()
-data.create('test', 'newFile', { foo: 'bar' }, (err, value) => {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(value)
-  }
-})
+data.create('test', 'newFile', { foo: 'bar' })
+  .then((value) => console.log('success', value))
+  .catch((err) => {
+    return console.log('error', err)
+  })
 const httpServer = http.createServer(function (req, res) {
   unifiedServer(req, res)
 })
