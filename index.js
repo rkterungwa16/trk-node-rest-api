@@ -5,10 +5,17 @@ const StringDecoder = require('string_decoder').StringDecoder
 const fs = require('fs')
 
 const config = require('./config')
+// const handlers = require('./lib/handlers')
 const Data = require('./lib/data')
 
 const data = new Data()
-data.update('test', 'newFile', { foo: 'Mr bean talking' })
+// data.update('test', 'newFile', { foo: 'Mr bean talking' })
+//   .then((value) => console.log('success', value))
+//   .catch((err) => {
+//     return console.log('error', err)
+//   })
+
+data.read('test', 'newFile')
   .then((value) => console.log('success', value))
   .catch((err) => {
     return console.log('error', err)
@@ -66,24 +73,42 @@ const unifiedServer = function (req, res) {
       'payload': buffer
     }
 
-    chosenHandler(data, function (statusCode, payload) {
-      statusCode = typeof (statusCode) === 'number' ? statusCode : 200
+    // var response = function (result, res) {
+    //   res.writeHead(200, { 'Content-Type': 'application/json' })
+    //   res.end(JSON.stringify(result) + '\n')
+    // }
 
-      payload = typeof (payload) === 'object' ? payload : {}
+    chosenHandler(data)
+      .then((value) => {
+        const statusCode = typeof (value.statusCode) === 'number' ? value.statusCode : 200
 
-      const payloadString = JSON.stringify(payload)
+        const payload = typeof (value.payload) === 'object' ? value.payload : {}
 
-      res.setHeader('Content-Type', 'application/json')
-      res.writeHead(statusCode)
-      res.end(payloadString)
-    })
+        const payloadString = JSON.stringify(payload)
+
+        res.setHeader('Content-Type', 'application/json')
+        res.writeHead(statusCode)
+        res.end(payloadString)
+      })
   })
 }
 
 const handlers = {}
 
-handlers.hello = function (data, callback) {
-  callback(new Error(406), { 'response': 'Hello, how are you doing? Welcome to Nodejs Master class' })
+handlers.hello = function (data) {
+  return new Promise((resolve, reject) => {
+    if (data) {
+      resolve({
+        statusCode: 200,
+        data,
+        payload: {
+          response: 'Hello, how are you doing? Welcome to Nodejs Master class'
+        }
+      })
+    }
+
+    reject(new Error(406))
+  })
 }
 
 handlers.notFound = function (data, callback) {
@@ -91,5 +116,6 @@ handlers.notFound = function (data, callback) {
 }
 
 const router = {
-  'hello': handlers.hello
+  'hello': handlers.hello,
+  'not-found': handlers.notFound
 }
