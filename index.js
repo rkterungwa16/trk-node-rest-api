@@ -5,21 +5,22 @@ const StringDecoder = require('string_decoder').StringDecoder
 const fs = require('fs')
 
 const config = require('./config')
-// const handlers = require('./lib/handlers')
-const Data = require('./lib/data')
+const handlers = require('./lib/handlers')
+const helpers = require('./lib/helpers')
+// const Data = require('./lib/data')
 
-const data = new Data()
+// const data = new Data()
 // data.update('test', 'newFile', { foo: 'Mr bean talking' })
 //   .then((value) => console.log('success', value))
 //   .catch((err) => {
 //     return console.log('error', err)
 //   })
 
-data.read('test', 'newFile')
-  .then((value) => console.log('success', value))
-  .catch((err) => {
-    return console.log('error', err)
-  })
+// data.read('test', 'newFile')
+//   .then((value) => console.log('success', value))
+//   .catch((err) => {
+//     return console.log('error', err)
+//   })
 const httpServer = http.createServer(function (req, res) {
   unifiedServer(req, res)
 })
@@ -70,7 +71,7 @@ const unifiedServer = function (req, res) {
       'queryStringObject': queryStringObject,
       'method': method,
       'headers': headers,
-      'payload': buffer
+      'payload': helpers.parseJsonToObject(buffer)
     }
 
     // var response = function (result, res) {
@@ -90,32 +91,11 @@ const unifiedServer = function (req, res) {
         res.writeHead(statusCode)
         res.end(payloadString)
       })
+      .catch(err => err)
   })
-}
-
-const handlers = {}
-
-handlers.hello = function (data) {
-  return new Promise((resolve, reject) => {
-    if (data) {
-      resolve({
-        statusCode: 200,
-        data,
-        payload: {
-          response: 'Hello, how are you doing? Welcome to Nodejs Master class'
-        }
-      })
-    }
-
-    reject(new Error(406))
-  })
-}
-
-handlers.notFound = function (data, callback) {
-  callback(new Error(404))
 }
 
 const router = {
   'hello': handlers.hello,
-  'not-found': handlers.notFound
+  'users': handlers.users
 }
