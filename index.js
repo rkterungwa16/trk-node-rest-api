@@ -91,7 +91,11 @@ const unifiedServer = function (req, res) {
         res.writeHead(statusCode)
         res.end(payloadString)
       })
-      .catch(err => err)
+      .catch(err => {
+        res.setHeader('Content-Type', 'application/json')
+        res.writeHead(err.statusCode)
+        res.end(JSON.stringify(err.message))
+      })
   })
 }
 
