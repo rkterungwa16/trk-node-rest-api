@@ -7,20 +7,14 @@ const fs = require('fs')
 const config = require('./config')
 const handlers = require('./lib/handlers')
 const helpers = require('./lib/helpers')
-// const Data = require('./lib/data')
 
-// const data = new Data()
-// data.update('test', 'newFile', { foo: 'Mr bean talking' })
-//   .then((value) => console.log('success', value))
-//   .catch((err) => {
-//     return console.log('error', err)
-//   })
-
-// data.read('test', 'newFile')
-//   .then((value) => console.log('success', value))
-//   .catch((err) => {
-//     return console.log('error', err)
-//   })
+helpers.sendTwilioSms('4158375309', 'hey you')
+  .then((value) => {
+    console.log(value)
+  })
+  .catch((err) => {
+    console.log('Error sending message', err)
+  })
 const httpServer = http.createServer(function (req, res) {
   unifiedServer(req, res)
 })
