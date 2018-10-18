@@ -1,1 +1,1 @@
-{"id":"722os5nfw3kb2veozkz8","userPhone":"08135833305","protocol":"http","url":"google.com","method":"get","successCodes":[200,201],"timeoutSeconds":3}
+{"id":"722os5nfw3kb2veozkz8","userPhone":false,"protocol":"http","url":"google.com","method":"get","successCodes":[200,201],"timeoutSeconds":3,"state":"down","lastChecked":1539860593618}
